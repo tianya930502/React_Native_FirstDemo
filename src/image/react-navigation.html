@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="tool" content="leanote-desktop-app">
+<title>react-navigation</title>
+<style>
+
+*{font-family:"lucida grande","lucida sans unicode",lucida,helvetica,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+
+body {
+  margin: 0;
+}
+
+/*公用文字样式*/
+h1{font-size:30px}h2{font-size:24px}h3{font-size:18px}h4{font-size:14px}
+.note-container{
+    width:850px; 
+    margin:auto;
+    padding: 10px 20px;
+    box-shadow: 1px 1px 10px #eee;
+}
+#title {
+  margin: 0;
+}
+table {
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    background-color: none;
+    border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+    background-color: rgb(247, 247, 249);
+}
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 6px 13px;
+}
+blockquote {
+  border-left-width:10px;
+  background-color:rgba(128,128,128,0.05);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+  padding:15px 20px;
+  border-left:5px solid rgba(128,128,128,0.075);
+}
+blockquote p {
+  margin-bottom:1.1em;
+  font-size:1em;
+  line-height:1.45
+}
+blockquote ul:last-child,blockquote ol:last-child {
+  margin-bottom:0
+}
+pre {
+  padding: 18px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  display: block;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  white-space: nowrap;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.footnote {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+  font-size: .8em;
+}
+
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+pre {
+  word-break:break-word
+}
+p,pre,pre.prettyprint,blockquote {
+  margin:0 0 1.1em
+}
+hr {
+  margin:2em 0
+}
+img {
+  max-width:100%
+}
+.sequence-diagram,.flow-chart {
+  text-align:center;
+  margin-bottom:1.1em
+}
+.sequence-diagram text,.flow-chart text {
+  font-size:15px !important;
+  font-family:"Source Sans Pro",sans-serif !important
+}
+.sequence-diagram [fill="#ffffff"],.flow-chart [fill="#ffffff"] {
+  fill:#f6f6f6
+}
+.sequence-diagram [stroke="#000000"],.flow-chart [stroke="#000000"] {
+  stroke:#3f3f3f
+}
+.sequence-diagram text[stroke="#000000"],.flow-chart text[stroke="#000000"] {
+  stroke:none
+}
+.sequence-diagram [fill="#000"],.flow-chart [fill="#000"],.sequence-diagram [fill="#000000"],.flow-chart [fill="#000000"],.sequence-diagram [fill="black"],.flow-chart [fill="black"] {
+  fill:#3f3f3f
+}
+ul,ol {
+  margin-bottom:1.1em
+}
+ul ul,ol ul,ul ol,ol ol {
+  margin-bottom:1.1em
+}
+kbd {
+  padding:.1em .6em;
+  border:1px solid rgba(63,63,63,0.25);
+  -webkit-box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  box-shadow:0 1px 0 rgba(63,63,63,0.25);
+  font-size:.7em;
+  font-family:sans-serif;
+  background-color:#fff;
+  color:#333;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 .1em;
+  white-space:nowrap
+}
+.toc ul {
+  list-style-type:none;
+  margin-bottom:15px
+}
+</style>
+<!-- 该css供自定义样式 -->
+<link href="../leanote-html.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="note-container">
+		<h1 class="title" id="leanote-title">react-navigation</h1>
+		<div class="content-html" id="leanote-content"><p><span style="font-size: 18pt;" data-mce-style="font-size: 18pt;"><strong><span id="mce_2_start" style="overflow:hidden;line-height:0px" data-mce-type="bookmark" data-mce-style="overflow:hidden;line-height:0px">﻿</span>一：react-navigation包含三类组件：<span id="mce_2_end" style="overflow:hidden;line-height:0px" data-mce-type="bookmark" data-mce-style="overflow:hidden;line-height:0px">﻿</span></strong></span></p><p>&nbsp; &nbsp; &nbsp;<span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>（1）StackNavigator：用来跳转页面和传递参数</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （2）TabNavigator：类似底部导航栏，用来在同一屏幕下切换不同页面</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （3）DrawerNavigator：侧滑菜单导航栏，用来设置带轴导航的屏幕</strong></span></p><p>&nbsp;<br></p><p><span style="font-size: 18pt;" data-mce-style="font-size: 18pt;"><strong>二：功能详解</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （1）react-navigation库属性介绍</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （2）StackNavigator，TabNavigator实现界面间跳转，Tab切换</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （3）StackNavigator界面之间的跳转，传值，取值</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （4）DrawerNavigator实现抽屉导航菜单</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （5）DrawerNavigator扩展功能</strong></span></p><p>&nbsp;<br></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;<strong>（1）<strong>StackNavigator</strong>属性介绍</strong></strong></span></p><p>&nbsp;<br></p><pre id="leanote_ace_1524621787278_0" class="brush:javascript ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 1050px;">navigationOptions：配置StackNavigator的一些属性。&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;title：标题，如果设置了这个导航栏和标签栏的title就会变成一样的，不推荐使用&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;header：可以设置一些导航的属性，如果隐藏顶部导航栏只要将这个属性设置为null&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerTitle：设置导航栏标题，推荐&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerBackTitle：设置跳转页面左侧返回箭头后面的文字，默认是上一个页面的标题。可以自定义，也可以设置为null&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerTruncatedBackTitle：设置当上个页面标题不符合返回箭头后的文字时，默认改成"返回"&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerRight：设置导航条右侧。可以是按钮或者其他视图控件&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerLeft：设置导航条左侧。可以是按钮或者其他视图控件&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerStyle：设置导航条的样式。背景色，宽高等&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerTitleStyle：设置导航栏文字样式&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerBackTitleStyle：设置导航栏‘返回’文字样式&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerTintColor：设置导航栏颜色&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;headerPressColorAndroid：安卓独有的设置颜色纹理，需要安卓版本大于5.0&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;gesturesEnabled：是否支持滑动返回手势，iOS默认支持，安卓默认关闭&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;
+screen：对应界面名称，需要填入import之后的页面&nbsp;&nbsp;
+&nbsp;&nbsp;
+mode：定义跳转风格&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;card：使用iOS和安卓默认的风格&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;modal：iOS独有的使屏幕从底部画出。类似iOS的present效果&nbsp;&nbsp;
+&nbsp;&nbsp;
+headerMode：返回上级页面时动画效果&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;float：iOS默认的效果&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;screen：滑动过程中，整个页面都会返回&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;none：无动画&nbsp;&nbsp;
+&nbsp;&nbsp;
+cardStyle：自定义设置跳转效果&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;transitionConfig：&nbsp;自定义设置滑动返回的配置&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;onTransitionStart：当转换动画即将开始时被调用的功能&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;onTransitionEnd：当转换动画完成，将被调用的功能&nbsp;&nbsp;
+&nbsp;&nbsp;
+path：路由中设置的路径的覆盖映射配置&nbsp;&nbsp;
+&nbsp;&nbsp;
+initialRouteName：设置默认的页面组件，必须是上面已注册的页面组件&nbsp;&nbsp;
+&nbsp;&nbsp;
+initialRouteParams：初始路由参数&nbsp;&nbsp;</pre><p>&nbsp;<br></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;path属性适用于<u>其他app或浏览器使用url打开本app并进入指定页面</u>。path属性用于声明一个界面路径，例如：【/pages/Home】。此时我们可以在手机浏览器中输入：app名称://pages/Home来启动该App，并进入Home界面。</strong></span></p><p>&nbsp;<br></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;（2）TabNavigator属性介绍</strong></span></p><p>&nbsp;<br></p><pre id="leanote_ace_1524622209811_0" class="brush:javascript ace-tomorrow" data-mce-style="line-height: 1.5; font-size: 14px; height: 1344px;">screen：和导航的功能是一样的，对应界面名称，可以在其他页面通过这个screen传值和跳转。&nbsp;&nbsp;
+&nbsp;&nbsp;
+navigationOptions：配置TabNavigator的一些属性&nbsp;&nbsp;
+&nbsp;&nbsp;
+title：标题，会同时设置导航条和标签栏的title&nbsp;&nbsp;
+&nbsp;&nbsp;
+tabBarVisible：是否隐藏标签栏。默认不隐藏(true)&nbsp;&nbsp;
+&nbsp;&nbsp;
+tabBarIcon：设置标签栏的图标。需要给每个都设置&nbsp;&nbsp;
+&nbsp;&nbsp;
+tabBarLabel：设置标签栏的title。推荐&nbsp;&nbsp;
+&nbsp;&nbsp;
+导航栏配置&nbsp;&nbsp;
+&nbsp;&nbsp;
+tabBarPosition：设置tabbar的位置，iOS默认在底部，安卓默认在顶部。（属性值：'top'，'bottom'）&nbsp;&nbsp;
+&nbsp;&nbsp;
+swipeEnabled：是否允许在标签之间进行滑动&nbsp;&nbsp;
+&nbsp;&nbsp;
+animationEnabled：是否在更改标签时显示动画&nbsp;&nbsp;
+&nbsp;&nbsp;
+lazy：是否根据需要懒惰呈现标签，而不是提前，意思是在app打开的时候将底部标签栏全部加载，默认false,推荐为true&nbsp;&nbsp;
+&nbsp;&nbsp;
+trueinitialRouteName：&nbsp;设置默认的页面组件&nbsp;&nbsp;
+&nbsp;&nbsp;
+backBehavior：按&nbsp;back&nbsp;键是否跳转到第一个Tab(首页)，&nbsp;none&nbsp;为不跳转&nbsp;&nbsp;
+&nbsp;&nbsp;
+tabBarOptions：配置标签栏的一些属性iOS属性&nbsp;&nbsp;
+&nbsp;&nbsp;
+activeTintColor：label和icon的前景色&nbsp;活跃状态下&nbsp;&nbsp;
+&nbsp;&nbsp;
+activeBackgroundColor：label和icon的背景色&nbsp;活跃状态下&nbsp;&nbsp;
+&nbsp;&nbsp;
+inactiveTintColor：label和icon的前景色&nbsp;不活跃状态下&nbsp;&nbsp;
+&nbsp;&nbsp;
+inactiveBackgroundColor：label和icon的背景色&nbsp;不活跃状态下&nbsp;&nbsp;
+&nbsp;&nbsp;
+showLabel：是否显示label，默认开启&nbsp;style：tabbar的样式&nbsp;&nbsp;
+&nbsp;&nbsp;
+labelStyle：label的样式安卓属性&nbsp;&nbsp;
+&nbsp;&nbsp;
+activeTintColor：label和icon的前景色&nbsp;活跃状态下&nbsp;&nbsp;
+&nbsp;&nbsp;
+inactiveTintColor：label和icon的前景色&nbsp;不活跃状态下&nbsp;&nbsp;
+&nbsp;&nbsp;
+showIcon：是否显示图标，默认关闭&nbsp;&nbsp;
+&nbsp;&nbsp;
+showLabel：是否显示label，默认开启&nbsp;style：tabbar的样式&nbsp;&nbsp;
+&nbsp;&nbsp;
+labelStyle：label的样式&nbsp;upperCaseLabel：是否使标签大写，默认为true&nbsp;&nbsp;
+&nbsp;&nbsp;
+pressColor：material涟漪效果的颜色（安卓版本需要大于5.0）&nbsp;&nbsp;
+&nbsp;&nbsp;
+pressOpacity：按压标签的透明度变化（安卓版本需要小于5.0）&nbsp;&nbsp;
+&nbsp;&nbsp;
+scrollEnabled：是否启用可滚动选项卡&nbsp;tabStyle：tab的样式&nbsp;&nbsp;
+&nbsp;&nbsp;
+indicatorStyle：标签指示器的样式对象（选项卡底部的行）。安卓底部会多出一条线，可以将height设置为0来暂时解决这个问题&nbsp;&nbsp;
+&nbsp;&nbsp;
+labelStyle：label的样式&nbsp;&nbsp;
+&nbsp;&nbsp;
+iconStyle：图标样式&nbsp;&nbsp;</pre><p>&nbsp;<br></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp;</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp;&nbsp;&nbsp;&nbsp; （3）<strong>DrawerNavigator属性介绍</strong></strong></span><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong><strong><br></strong></strong></span></p><pre id="leanote_ace_1524646422371_0" class="brush:javascript ace-tomorrow ace_focus" data-mce-style="line-height: 1.5; font-size: 14px; height: 483px;">DrawerNavigatorConfig&nbsp;&nbsp;
+&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;drawerWidth&nbsp;-&nbsp;抽屉的宽度&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;drawerPosition&nbsp;-&nbsp;选项是左或右。&nbsp;默认为左侧位置&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;contentComponent&nbsp;-&nbsp;用于呈现抽屉内容的组件，例如导航项。&nbsp;接收抽屉的导航。&nbsp;默认为DrawerItems&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;contentOptions&nbsp;-&nbsp;配置抽屉内容&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;initialRouteName&nbsp;-&nbsp;初始路由的routeName&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;order&nbsp;-&nbsp;定义抽屉项目顺序的routeNames数组。&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;路径&nbsp;-&nbsp;提供routeName到路径配置的映射，它覆盖routeConfigs中设置的路径。&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;backBehavior&nbsp;-&nbsp;后退按钮是否会切换到初始路由？&nbsp;如果是，设置为initialRoute，否则为none。&nbsp;默认为initialRoute行为&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;DrawerItems的contentOptions属性&nbsp;&nbsp;
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;activeTintColor&nbsp;-&nbsp;活动标签的标签和图标颜色&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;activeBackgroundColor&nbsp;-&nbsp;活动标签的背景颜色&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;inactiveTintColor&nbsp;-&nbsp;非活动标签的标签和图标颜色&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;inactiveBackgroundColor&nbsp;-&nbsp;非活动标签的背景颜色&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;内容部分的样式样式对象&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;labelStyle&nbsp;-&nbsp;当您的标签是字符串时，要覆盖内容部分中的文本样式的样式对象</pre><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （4）使用StackNavigator + TabNavigator实现Tab界面切换，界面间导航，多级跳转</strong></span></p><p>&nbsp;<br></p><pre id="leanote_ace_1524800069316_0" class="brush:javascript ace-tomorrow" draggable="false" data-mce-style="line-height: 1.5; font-size: 14px; height: 2709px;">从头开始一个导航的小案例：
+（1）{content}nbsp;react-native&nbsp;init&nbsp;FirstApp&nbsp;//&nbsp;新建一个项目
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{content}nbsp;cd&nbsp;FirstApp
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{content}nbsp;react-native&nbsp;run-ios&nbsp;//&nbsp;启动项目&nbsp;//&nbsp;启动的时候可能会报错，这是因为babel-preset-react-native版本的问题，打开package.json，把babel-preset-react-native的版本改为4.0.0，重新启动即可
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+（2）在根目录下新建&nbsp;src/screen/TabNavigation&nbsp;目录（目录可以随便建，只要引用的时候保证路径是对的即可）&nbsp;在TabNavigation目录下新建HomePage.js文件，作为我们的第一个页面
+
+（3）TabNavigation/HomePage.js文件内容
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;React&nbsp;from&nbsp;'react';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StyleSheet,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Button,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Image
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;from&nbsp;'react-native';
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StackNavigator,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TabNavigator
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;from&nbsp;'react-navigation';
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;ChatScreen&nbsp;from&nbsp;'./ChatScreen';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;NewScreen&nbsp;from&nbsp;"./NewPage";
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;LoginScreen&nbsp;from&nbsp;"./LoginPage";
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;HomePage&nbsp;extends&nbsp;React.Component&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;navigationOptions&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title:&nbsp;'首页',//设置标题内容
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onClickNew()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;跳到New页面，并且传参数
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.props.navigation.navigate('New',&nbsp;{name:&nbsp;'zhangsan'});
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;render()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;{&nbsp;navigate&nbsp;}&nbsp;=&nbsp;this.props.navigation;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;View style={styles.container}&gt;
+                    &lt;Text style={{ padding: 10 }}&gt;Hello, Navigation!&lt;/Text&gt;
+                    &lt;Button
+                        onPress={() =&gt; navigate('Chat', { user: 'Sybil' })}
+                        title="点击跳转" /&gt;
+                    &lt;Button
+                        onPress={this.onClickNew.bind(this)}
+                        title="New" /&gt;
+                &lt;/View&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;MainScreen&nbsp;=&nbsp;StackNavigator({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tab:&nbsp;{&nbsp;screen:&nbsp;HomePage},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chat:&nbsp;{&nbsp;screen:&nbsp;ChatScreen},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New:&nbsp;{&nbsp;screen:&nbsp;NewScreen},
+&nbsp;&nbsp;&nbsp;&nbsp;})
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;styles&nbsp;=&nbsp;StyleSheet.create({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;container:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flex:&nbsp;1,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backgroundColor:&nbsp;'#fff'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height:&nbsp;22,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width:&nbsp;22,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resizeMode:&nbsp;'contain'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;SimpleApp是要暴露出去的方法，也是我们运行项目时进入到的第一个页面，首先我们会进入到login页面，因为在login页面中不需要Header，所以我们设置headerMode:'none'，否则的话我们每点进一个页面都会多一个Header
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;SimpleApp&nbsp;=&nbsp;StackNavigator({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login:&nbsp;{&nbsp;screen:&nbsp;LoginScreen&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Home:&nbsp;{&nbsp;screen:&nbsp;MainScreen&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;},&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headerMode:&nbsp;'none',
+&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;export&nbsp;default&nbsp;SimpleApp;
+&nbsp;&nbsp;&nbsp;&nbsp;
+（4）在TabNavigation目录下新建Loginjs文件
+&nbsp;&nbsp;&nbsp;&nbsp;TabNavigation/Loginjs&nbsp;文件内容
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;React,{Component}&nbsp;from&nbsp;'react';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Button,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StyleSheet
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;from&nbsp;'react-native';
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;LoginScreen&nbsp;extends&nbsp;Component{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;render(){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;{&nbsp;navigate&nbsp;}&nbsp;=&nbsp;this.props.navigation;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;View style={{backgroundColor:'#fff',flex:1}}&gt;
+                    &lt;Text style={{padding:20}}&gt;this is Login page&lt;/Text&gt;
+                    &lt;Button
+                        onPress={() =&gt; navigate('Home', { user: 'Sybil' })}
+                        title="登录" /&gt;
+                    &lt;Button
+                        onPress={() =&gt; navigate('Chat', { user: 'haha' })}
+                        title="Chat" /&gt;
+                &lt;/View&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;styles&nbsp;=&nbsp;StyleSheet.create({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width:&nbsp;24,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height:&nbsp;24,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;export&nbsp;default&nbsp;LoginScreen;
+
+（5）在TabNavigation目录下新建ChatScreen.js文件
+&nbsp;&nbsp;&nbsp;&nbsp;TabNavigation/ChatScreen.js&nbsp;文件内容
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;React&nbsp;from&nbsp;'react';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Button,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;from&nbsp;'react-native';
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;ChatScreen&nbsp;extends&nbsp;React.Component&nbsp;{e
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;navigationOptions&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title:'聊天',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;render()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;通过this.props.navigation.state属性可以拿到跳过来的页面传的参数
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;{params}&nbsp;=&nbsp;this.props.navigation.state;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;通过this.props.navigation属性可以跳到某个页面，并给该页面传参
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;{&nbsp;navigate&nbsp;}&nbsp;=&nbsp;this.props.navigation;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;View style={{backgroundColor:'#fff',flex:1}}&gt;
+                    &lt;Text style={{padding:20}}&gt;Chat with {params.user}&lt;/Text&gt;
+                    &lt;Button onPress={() =&gt; navigate('New', {name: '张三'})} title='点击跳到new页' /&gt;
+                &lt;/View&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;export&nbsp;default&nbsp;ChatScreen;
+
+（6）在TabNavigation目录下新建NewPage.js文件
+&nbsp;&nbsp;&nbsp;&nbsp;TabNavigation/newPage.js&nbsp;文件内容
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;React,{Component}&nbsp;from&nbsp;'react';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StyleSheet
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;from&nbsp;'react-native';
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;NewScreen&nbsp;extends&nbsp;Component{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;navigationOptions&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title:&nbsp;'新闻',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;render(){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;{&nbsp;params&nbsp;}&nbsp;=&nbsp;this.props.navigation.state;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;View style={{backgroundColor:'#fff',flex:1}}&gt;
+                    &lt;Text style={{padding:20}}&gt;this is new page&lt;/Text&gt;
+                &lt;/View&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;styles&nbsp;=&nbsp;StyleSheet.create({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width:&nbsp;24,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height:&nbsp;24,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;export&nbsp;default&nbsp;NewScreen;
+
+（7）修改index.js文件中的内容
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{&nbsp;AppRegistry&nbsp;}&nbsp;from&nbsp;'react-native';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;SimpleApp&nbsp;from&nbsp;'./src/screen/TabNavigation/HomePage';
+&nbsp;&nbsp;&nbsp;&nbsp;AppRegistry.registerComponent('FirstApp',&nbsp;()&nbsp;=&gt;&nbsp;SimpleApp);
+&nbsp;&nbsp;&nbsp;&nbsp;
+此时运行代码就会发现首页是login页，从login页可以进到home页，从home页可以进到New页和Chat页，从Chat页可以进入到New页
+</pre><p>&nbsp;<br></p><p>&nbsp; &nbsp;<strong><span style="font-size: 12pt;" data-mce-style="font-size: 12pt;">上面的案例只用到了StackNavigator,即只是页面之间的跳转，并没有用到TabNavigator,下面我们把TabNavigator也加入到页面中</span></strong></p><pre id="leanote_ace_1524813111084_0" class="brush:javascript ace-tomorrow" draggable="false">（1）{content}nbsp;yarn&nbsp;add&nbsp;react-native-elements&nbsp;//&nbsp;安装react-native-elements,我们下面要用到里面的icon。如果报错的话，把该包删除，文件里面的引用也删除
+
+（2）在TabNavigation目录下新建MinePage.js文件
+&nbsp;&nbsp;&nbsp;&nbsp;TabNavigation/MinePage.js&nbsp;文件内容
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;React,{Component}&nbsp;from&nbsp;'react';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Button,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Image,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StyleSheet
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;from&nbsp;'react-native';
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;MinePage&nbsp;extends&nbsp;Component{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;navigationOptions&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title:'我的',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawerLabel:&nbsp;'我的',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawerIcon:&nbsp;({&nbsp;tintColor&nbsp;})&nbsp;=&gt;&nbsp;(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;render(){;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;View style={{backgroundColor:'#fff',flex:1}}&gt;
+                    &lt;Text style={{padding:20}}&gt;Sybil&lt;/Text&gt;
+                    &lt;Button
+                        style={{padding:20}}
+                        onPress={() =&gt; this.props.navigation.navigate('DrawerOpen')}
+                        title="点击打开侧滑菜单"
+                    /&gt;
+                &lt;/View&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;styles&nbsp;=&nbsp;StyleSheet.create({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width:&nbsp;24,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height:&nbsp;24,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;export&nbsp;default&nbsp;MinePage;
+
+（2）修改TabNavigation/HomePage.js中的内容
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;React&nbsp;from&nbsp;'react';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StyleSheet,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Button,
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;from&nbsp;'react-native';
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StackNavigator,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TabNavigator
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;from&nbsp;'react-navigation';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;{&nbsp;Icon&nbsp;}&nbsp;from&nbsp;'react-native-elements';
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;ChatScreen&nbsp;from&nbsp;'./ChatScreen';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;MinePage&nbsp;from&nbsp;'./MinePage';
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;NewScreen&nbsp;from&nbsp;"./NewPage";
+&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;LoginScreen&nbsp;from&nbsp;"./LoginPage";
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;HomePage&nbsp;extends&nbsp;React.Component&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;navigationOptions&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title:&nbsp;'首页',//设置标题内容
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onClickNew()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.props.navigation.navigate('New',&nbsp;{name:&nbsp;'张三'});
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;render()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;{&nbsp;navigate&nbsp;}&nbsp;=&nbsp;this.props.navigation;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;View style={styles.container}&gt;
+                    &lt;Text style={{ padding: 10 }}&gt;Hello, Navigation!&lt;/Text&gt;
+                    &lt;Button
+                        onPress={() =&gt; navigate('Chat', { user: 'Sybil' })}
+                        title="点击跳转" /&gt;
+                    &lt;Button
+                        onPress={this.onClickNew.bind(this)}
+                        title="New" /&gt;
+                &lt;/View&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;添加TabNavigator底部导航按钮
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;TabScreen&nbsp;=&nbsp;TabNavigator({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Home:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen:&nbsp;HomePage,&nbsp;//&nbsp;要跳转到的页面
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigationOptions:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabBarLabel:&nbsp;'首页',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabBarIcon:&nbsp;({&nbsp;tintColor&nbsp;})&nbsp;=&gt;&nbsp;,&nbsp;//&nbsp;图标
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Certificate:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen:&nbsp;MinePage,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigationOptions:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabBarLabel:&nbsp;'我的',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabBarIcon:&nbsp;({&nbsp;tintColor&nbsp;})&nbsp;=&gt;&nbsp;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;MainScreen&nbsp;=&nbsp;StackNavigator({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Tab:&nbsp;{screen:&nbsp;TabScreen},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tab:&nbsp;{screen:&nbsp;HomePage},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chat:&nbsp;{&nbsp;screen:&nbsp;ChatScreen},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New:&nbsp;{&nbsp;screen:&nbsp;NewScreen},
+&nbsp;&nbsp;&nbsp;&nbsp;})
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;styles&nbsp;=&nbsp;StyleSheet.create({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;container:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flex:&nbsp;1,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backgroundColor:&nbsp;'#fff'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon:&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height:&nbsp;22,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width:&nbsp;22,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resizeMode:&nbsp;'contain'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;SimpleApp&nbsp;=&nbsp;StackNavigator({
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login:&nbsp;{&nbsp;screen:&nbsp;LoginScreen&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Home:&nbsp;{&nbsp;screen:&nbsp;MainScreen&nbsp;},
+&nbsp;&nbsp;&nbsp;&nbsp;},&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headerMode:&nbsp;'none',
+&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;export&nbsp;default&nbsp;SimpleApp;
+</pre><p><strong><span style="font-size: 12pt;" data-mce-style="font-size: 12pt;">&nbsp;此时再运行react-native run-ios 会发现在屏幕底部多了两个导航，这两个导航分别可以跳到home页和mine页</span></strong><br></p><p>&nbsp;<br></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp; &nbsp; （5）DrawerNavigator扩展功能</strong></span></p><p><span style="font-size: 14pt;" data-mce-style="font-size: 14pt;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <span style="font-size: 12pt;" data-mce-style="font-size: 12pt;">上面的案例只用到了StackNavigator和Tabnavigator，下面继续使用DrawerNavigator</span></strong></span></p><p><pre id="leanote_ace_1524903747150_0" class="brush:javascript ace-tomorrow" draggable="false">（1）我们要从MinePage中打开侧导航，所以要先修改MimePage.js中的内容
+import React,{Component} from 'react';
+import {
+        Button,
+        View,
+        Text,
+        StyleSheet
+    } from 'react-native';
+    import { DrawerNavigator } from 'react-navigation';
+    import { Icon } from 'react-native-elements';
+    
+    import DrawerScreen from './DrawerPage';
+    import NewScreen from './NewPage';
+    
+    class MinePage extends Component{
+        static navigationOptions = {
+            title:'我的',
+            drawerIcon: ({ tintColor }) =&gt; &lt;Icon name="perm-identity" size={25} color={tintColor} /&gt;,
+        };
+        render(){
+            return(
+                &lt;View style={{backgroundColor:'#fff',flex:1}}&gt;
+                    &lt;Text style={{padding:20}}&gt;Sybil&lt;/Text&gt;
+                    &lt;Button
+                        style={{padding:20}}
+                        onPress={() =&gt; this.props.navigation.navigate('DrawerOpen')}
+                        title="点击打开侧滑菜单"
+                    /&gt;
+                &lt;/View&gt;
+            );
+        }
+    }
+    const styles = StyleSheet.create({
+        icon: {
+            width: 24,
+            height: 24,
+        },
+    });
+    const MyChatNavigator = DrawerNavigator({
+        MyChat: {
+            screen: MinePage,
+        },
+        Notifications: {
+            screen: DrawerScreen,
+        },
+        New: {
+            screen: NewScreen,
+        }
+    },{
+        drawerWidth: 220, // 抽屉宽
+        drawerPosition: 'left', // 抽屉在左边还是右边
+        contentOptions: {
+            initialRouteName: DrawerScreen, // 默认页面组件
+            activeTintColor: '#008AC9',  // 选中文字颜色
+            activeBackgroundColor: '#f5f5f5', // 选中背景颜色
+            inactiveTintColor: '#000',  // 未选中文字颜色
+            inactiveBackgroundColor: '#fff', // 未选中背景颜色
+            style: {  // 样式
+    
+            }
+        }
+    });
+
+    export default MyChatNavigator;
+    
+（2）在TabNavigation目录下新建DrawerPage.js文件
+    TabNavigation/DrawerPage.js 文件内容
+    import React from 'react';
+    import {
+        StyleSheet,
+        View,
+        Button,
+    } from 'react-native';
+    import { Icon } from 'react-native-elements';
+    class DrawerScreen extends React.Component {
+        static navigationOptions = {
+            title:'通知',
+            drawerIcon: ({ tintColor }) =&gt; &lt;Icon name="message" size={25} color={tintColor} /&gt;,
+        };
+        render() {
+            return (
+                &lt;View style={{backgroundColor:'#fff'}}&gt;
+                    &lt;Button
+                        style={{padding:20}}
+                        onPress={() =&gt; this.props.navigation.navigate('DrawerOpen')}
+                        title="点击打开侧滑菜单"
+                    /&gt;
+                    &lt;Button
+                        onPress={() =&gt; this.props.navigation.goBack()}
+                        title="返回我的界面"
+                    /&gt;
+                &lt;/View&gt;
+            );
+        }
+    }
+    const styles = StyleSheet.create({
+        tabIcon: {
+            width: 24,
+            height: 24,
+        },
+    });
+    export default DrawerScreen;</pre></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p><p>&nbsp;<br></p></div>
+	</div>
+
+<!-- 该js供其它处理 -->
+<script src="../leanote-html.js"></script>
+</body>
+</html>

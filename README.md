@@ -2,6 +2,7 @@
   <a href="https://react-native-community.github.io/react-native-elements/">
     <img alt="react-native-elements" src="https://user-images.githubusercontent.com/5962998/37248835-ce3dad4a-24b1-11e8-9c4b-b058c5a5e1e9.png" width="450">
   </a>
+  <img alt="react-native-elements" src="./src/image/react-navigation.pdf" width="450">
 </p>
 
 <h3 align="center">
