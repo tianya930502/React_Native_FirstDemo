@@ -4,7 +4,7 @@
 </h3>
 
 <p align="center">
-  <img alt="react-native-elements" src="./src/image/react-navigation.png" width="450">
+  <img alt="react-native-elements" src="./src/image/react-navigation.pdf" width="450">
 </p>
 
 ## Get Started
@@ -15,3 +15,5 @@ $ cd React_Native_FirstDemo
 $ npm install
 $ react-native run-ios
 ```
+
+

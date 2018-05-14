@@ -23,6 +23,9 @@ class AllUserScreen extends Component{
         }
     }
     componentDidMount() {
+        Services.login().then(res => {
+            console.log(res);
+        })
         Services.getAllUsers().then(res => {
             console.log(res);
             if (res.data.isSuccess) {

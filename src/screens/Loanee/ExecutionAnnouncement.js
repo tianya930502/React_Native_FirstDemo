@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-    Button,
-    View,
-    Text,
-    StyleSheet,
-    PanResponder,
-    AsyncStorage
-} from 'react-native';
+import { Button, ScrollView, View, Text, TextInput, PanResponder, AsyncStorage } from 'react-native';
+import { Input } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { DrawerNavigator } from 'react-navigation';
 import * as Services from '../../services/dimensionality';
 import * as Storage from '../../utils/storage';
@@ -17,7 +12,7 @@ import RefereeDocumentsScreen from './RefereeDocuments';
 import LitigationProcessScreen from './LitigationProcess';
 import CourtNoticeScreen from './CourtNotice';
 import ExposureStageScreen from './ExposureStage';
-import DeliveryNoticeScreen from '../DeliveryNotice';
+import DeliveryNoticeScreen from './DeliveryNotice';
 import LawyerLetterScreen from './LawyerLetter';
 
 class ExecutionAnnouncementScreen extends React.Component{
@@ -33,7 +28,7 @@ class ExecutionAnnouncementScreen extends React.Component{
             // 用户移动时执行的事件
             onPanResponderMove: (evt, gestureState) => {
                 // console.log(gestureState.dx); // 用户移动的距离，向右为正，向左为负
-                if(isTrue) {
+                if(!gestureState.dy && isTrue) {
                     isTrue = false;
                     this.props.navigation.navigate('DrawerOpen');
                 }
@@ -48,26 +43,44 @@ class ExecutionAnnouncementScreen extends React.Component{
     }
 
     componentDidMount() {
-        const { params } = this.props.navigation.state;
-        const obj = {
-            dataDimension: 'executive',
-            queryType: 2,
-        }
-        AsyncStorage.multiGet(['idNo', 'queryName', 'queryType', 'readStatus']).then(res => {
-            const storageObj = Storage.DealStorageData(res);
-            console.log({...storageObj, ...obj});
-            Services.getimensionality({...obj, ...storageObj}).then(res => {
-                console.log(res);
-            })
-        });
+        // const { params } = this.props.navigation.state;
+        // const obj = {
+        //     dataDimension: 'executive',
+        //     queryType: 1,
+        //     staffKey: 'B8CB8B8A472EDD05E7CBFD29963D41A38782DA3356DC0987',
+        //     staffNumber: 'mscrmadmin',
+        //     projectNo: 'G20180413004051',
+        // }
+        // AsyncStorage.multiGet(['idNo', 'queryName', 'queryType', 'readStatus']).then(res => {
+        //     const storageObj = Storage.DealStorageData(res);
+        //     console.log({...storageObj, ...obj});
+        //     Services.getimensionality().then(res => {
+        //         console.log(res);
+        //     })
+        // });
+    }
+
+    InputCaseNum(text) {
+        console.log(text);
     }
     render(){
         const { navigate } = this.props.navigation;
         return(
-            <View style={styles.container} {...this._gestureHandlers.panHandlers}>
+            <ScrollView style={styles.container} {...this._gestureHandlers.panHandlers}>
                 <Text style={{padding:20}}>这是 个人--执行公告 页面</Text>
+                <Input
+                    inputContainerStyle={{height: 40, borderColor: 'gray', borderWidth: 1, borderRadius: 20, width: 250, paddingLeft: 20, paddingRight: 20, margin: 20}}
+                    placeholder='输入案号进行搜索'
+                    onChangeText={this.InputCaseNum.bind(this)}
+                    rightIcon={{ name: 'search', color: '#666' }}
+                />
+                <TextInput
+                    style={{height: 40, borderColor: 'gray', borderWidth: 1, borderRadius: 20, width: 250, paddingLeft: 20, paddingRight: 20, margin: 20}}
+                    placeholder='输入案号进行搜索'
+                    onChangeText={this.InputCaseNum.bind(this)}
+                />
                 <Button onPress={() => navigate('DrawerOpen')} title='打开侧滑菜单' />
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -75,9 +88,9 @@ class ExecutionAnnouncementScreen extends React.Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // backgroundColor: '#F5FCFF',
     },
 });
 
