@@ -23,13 +23,10 @@ class AllUserScreen extends Component{
         }
     }
     componentDidMount() {
-        Services.login().then(res => {
-            console.log(res);
-        })
         Services.getAllUsers().then(res => {
             console.log(res);
-            if (res.data.isSuccess) {
-                const list = res.data.datas.list;
+            if (res.isSuccess) {
+                const list = res.datas.list;
                 const CompanyList = [];
                 const PeopleList = [];
                 list.forEach(item => {
@@ -53,7 +50,7 @@ class AllUserScreen extends Component{
         console.log(item);
         const { navigate } = this.props.navigation;
         navigate('ExecutionAnnouncement');
-        AsyncStorage.setItem('idNo', `${item.idNo === undefined ? '' : item.idNo}`);
+        AsyncStorage.setItem('queryNumber', `${item.idNo === undefined ? '' : item.idNo}`);
         AsyncStorage.setItem('queryName', `${item.queryName === undefined ? '' : item.queryName}`);
         AsyncStorage.setItem('queryType', `${item.queryType === undefined ? '' : item.queryType}`);
         AsyncStorage.setItem('readStatus', `${item.readStatus === undefined ? '' : item.readStatus}`);

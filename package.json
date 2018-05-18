@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "antd-mobile": "^2.1.8",
     "apsl-react-native-button": "^3.1.1",
     "dva-core": "^1.2.1",
     "eslint": "^4.19.1",
@@ -19,8 +20,11 @@
     "navigation": "^5.0.1",
     "node": "^10.0.0",
     "prop-types": "^15.6.1",
+    "qs": "^6.5.2",
     "react": "16.3.1",
+    "react-dom": "^16.3.2",
     "react-native": "0.55.3",
+    "react-native-calendars": "^1.19.3",
     "react-native-elements": "1.0.0-beta5",
     "react-native-gesture-password": "^0.3.2",
     "react-native-vector-icons": "^4.6.0",
@@ -29,6 +33,7 @@
   },
   "devDependencies": {
     "babel-jest": "22.4.3",
+    "babel-plugin-import": "^1.7.0",
     "babel-preset-react-native": "4.0.0",
     "jest": "22.4.3",
     "react-test-renderer": "16.3.1"

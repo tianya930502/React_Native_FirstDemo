@@ -1,15 +1,7 @@
 import React from 'react';
-import {
-    Button,
-    View,
-    Text,
-    StyleSheet,
-    TouchableHighlight,
-    PanResponder
-} from 'react-native';
+import { Button, ScrollView, Text, AsyncStorage, StyleSheet, PanResponder } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
-
-// import { MoveOpenDwrawer } from '../../utils/moveInScreen';
+import * as Services from '../../services/dimensionality';
 
 import LostNoticeScreen from './LostNotice';
 import ProceedingsAnnouncementComScreen from './ProceedingsAnnouncement';
@@ -20,9 +12,48 @@ import ExposureStageComScreen from './ExposureStage';
 import DeliveryNoticeComScreen from './DeliveryNotice';
 import LawyerLetterComScreen from './LawyerLetter';
 
+import DetailScreen from '../../components/DetailScreen/DetailScreen';
+import CompanyBaseInfo from '../../components/CompanyBaseInfo';
+import Table from '../../components/Table';
+import { DealStorageData } from "../../utils/storage";
+
+const layoutData = {
+    isHaveSearch: true, // 是否有搜索框
+    isHaveDetailScreen: true, // 是否有详细筛选
+    dateType: '立案日期', // 日期类型
+    startTimeName: 'filingStartTime', // 要筛选的开始时间字段
+    endTimeName: 'filingEndTime', // 要筛选的结束时间字段
+    region: {
+        isHave: true, // 是否有省份
+        params: {
+            dataDimension: 'executive', // 'executive'为mock数据，真实数据为维度
+        },
+    },
+    detailScreenCondition: [
+        // 详细筛选条件
+        {
+            title: '渠道来源', // 标题, 用来判断选择的是哪一种类型
+            arr: ['正信用', '法海', '汇法'], // 可选择的筛选条件
+        },
+    ],
+};
+
+
 class ExecutionAnnouncementComScreen extends React.Component{
     static navigationOptions = {
         title: '执行公告',
+    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            allScreenConditions: '', // 所有筛选条件
+            pagination: {
+                currentPage: 1,
+                pageSize: 10,
+            },
+            ListData: '', // 列表数据
+            BaseinfoData: '', // 基础信息
+        }
     }
     componentWillMount() {
         let isTrue = true;
@@ -33,7 +64,7 @@ class ExecutionAnnouncementComScreen extends React.Component{
             // 用户移动时执行的事件
             onPanResponderMove: (evt, gestureState) => {
                 // console.log(gestureState.dx); // 用户移动的距离，向右为正，向左为负
-                if(isTrue) {
+                if(!gestureState.dy && isTrue) {
                     isTrue = false;
                     this.props.navigation.navigate('DrawerOpen');
                 }
@@ -47,13 +78,84 @@ class ExecutionAnnouncementComScreen extends React.Component{
         })
     }
 
+    componentDidMount() {
+        // const { params } = this.props.navigation.state;
+        AsyncStorage.multiGet(['staffNumber', 'secretKey', 'projectNo', 'queryName', 'queryNumber', 'queryType']).then(res => {
+            const obj = DealStorageData(res);
+            Services.getimensionality({...obj, ...{dataDimension: "executive"}}).then(res => {
+                if(res.isSuccess) {
+                    console.log(res.datas.page.dataList);
+                    this.setState({
+                        ListData: res.datas.page.dataList,
+                    })
+                }
+            })
+            Services.getBaseInfoData({...obj, ...{dataDimension: "executive"}}).then(res => {
+                if(res.isSuccess) {
+                    console.log(res.datas.list);
+                    this.setState({
+                        BaseinfoData: res.datas.list,
+                    })
+                }
+            })
+        });
+    }
+
+    // 案号搜索
+    CaseNumSearch(obj) {
+        console.log(obj);
+    }
+
+    // 详细筛选搜索
+    DetailScreen(obj) {
+        console.log(obj);
+    }
+
     render(){
         const { navigate } = this.props.navigation;
+        const { BaseinfoData, ListData } = this.state;
+        const title = [
+            {
+                key: 'id',
+                value: '#'
+            },
+            {
+                key: 'caseNo',
+                value: '案号'
+            },
+            {
+                key: 'filingTime',
+                value: '立案日期'
+            },
+            {
+                key: 'courtName',
+                value: '法院'
+            },
+            {
+                key: 'caseStatusDes',
+                value: '案件状态'
+            },
+            {
+                key: 'executes',
+                value: '执行标的'
+            },
+            {
+                key: 'region',
+                value: '省份'
+            },
+            {
+                key: 'apiDataSource',
+                value: '详情'
+            },
+        ];
         return(
-            <View style={styles.container} {...this._gestureHandlers.panHandlers}>
-                <Text style={{padding:20}}>这是 企业--执行公告 页面</Text>
+            <ScrollView style={styles.container} {...this._gestureHandlers.panHandlers}>
+                <CompanyBaseInfo BaseinfoData={BaseinfoData} />
+                <DetailScreen layoutData={layoutData} CaseNumSearch={this.CaseNumSearch.bind(this)} DetailScreen={this.DetailScreen.bind(this)}
+                />
+                <Table title={title} ListData={ListData} />
                 <Button onPress={() => navigate('DrawerOpen')} title='打开侧滑菜单' />
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -61,10 +163,16 @@ class ExecutionAnnouncementComScreen extends React.Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
     },
+    inputContainerStyle: {
+        height: 30,
+        fontSize: 18,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 10,
+        width: 250,
+        marginLeft: 30,
+    }
 });
 
 const DrawerScreen = DrawerNavigator({

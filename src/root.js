@@ -39,7 +39,8 @@ const MainScreen = StackNavigator(
 
 const AppNavigator = StackNavigator(
     {
-        Login: { screen: LoginScreen },
+        // Login: { screen: LoginScreen },
+        Login: { screen: AllUserScreen },
         Main: { screen: MainScreen },
         SetPassword: { screen: SetPasswordScreen },
         PasswordLogin: { screen: PasswordLoginScreen },
