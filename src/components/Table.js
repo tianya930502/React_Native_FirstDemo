@@ -14,7 +14,6 @@ class Table extends React.Component{
     }
 
     OpenModal(item) {
-        console.log(item);
         this.setState({
             modal: true,
             modalData: item,
@@ -40,10 +39,6 @@ class Table extends React.Component{
                 })
             })
         }
-        console.log(arr);
-        console.log(ListData);
-        console.log(modalData.arr);
-        console.log(modal);
         return(
             <View style={styles.container}>
                 <Modal
@@ -57,9 +52,9 @@ class Table extends React.Component{
                         {
                             title.map((item, index) => {
                                 return (
-                                    <View key={index} style={{height: 25, flexDirection: 'row', alignItems:'center'}}>
-                                        <Text style={{fontWeight: '800', width: 80}}>{item.value} : </Text>
-                                        <Text style={{fontSize: 12}}>{modalData[item.key] || '-'}</Text>
+                                    <View key={index} style={{flexDirection: 'row', alignItems:'center'}}>
+                                        <Text style={{fontWeight: '800', width: 80, minHeight: 25}}>{item.value} : </Text>
+                                        <Text style={{fontSize: 12, minHeight: 25, width: 180}}>{modalData[item.key] || '-'}</Text>
                                     </View>
 
                                 )
@@ -83,7 +78,7 @@ class Table extends React.Component{
                             return (
                                 <View style={styles.Item} key={index}>
                                     <Text style={styles.text}>{item.id}</Text>
-                                    <Text style={styles.text}>{item.caseNo}</Text>
+                                    <Text style={{width: 150 }}>{item.caseNo}</Text>
                                     <Text style={styles.text}>...</Text>
                                     <Button onClick={this.OpenModal.bind(this, item)} type="primary" inline size="small">查看详情</Button>
                                 </View>
@@ -106,7 +101,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         height: 25,
-
     },
     text: {
         height: 25,
@@ -119,7 +113,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderTopColor: 'gray',
         borderTopWidth: 1,
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        alignItems: 'center',
     }
 
 });

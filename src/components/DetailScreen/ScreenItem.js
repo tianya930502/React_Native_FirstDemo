@@ -19,7 +19,6 @@ class ScreenItem extends React.Component{
 
     // 筛选条件
     ScreenCondition(text) {
-        console.log(text);
         const { value } = this.state;
         // 如果不存在text返回false
         const str = value.some((data, index) => {
@@ -38,7 +37,6 @@ class ScreenItem extends React.Component{
         this.setState({
             value,
         });
-        console.log(value);
     }
 
     // 判断是否被选中

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button, ScrollView, Text, AsyncStorage, StyleSheet, PanResponder } from 'react-native';
-import { DrawerNavigator } from 'react-navigation';
+import { Pagination, Icon } from 'antd-mobile';
 import * as Services from '../../services/dimensionality';
 
+import { DrawerNavigator } from 'react-navigation';
 import LostNoticeScreen from './LostNotice';
 import ProceedingsAnnouncementComScreen from './ProceedingsAnnouncement';
 import RefereeDocumentsComScreen from './RefereeDocuments';
@@ -23,12 +24,6 @@ const layoutData = {
     dateType: '立案日期', // 日期类型
     startTimeName: 'filingStartTime', // 要筛选的开始时间字段
     endTimeName: 'filingEndTime', // 要筛选的结束时间字段
-    region: {
-        isHave: true, // 是否有省份
-        params: {
-            dataDimension: 'executive', // 'executive'为mock数据，真实数据为维度
-        },
-    },
     detailScreenCondition: [
         // 详细筛选条件
         {
@@ -37,7 +32,6 @@ const layoutData = {
         },
     ],
 };
-
 
 class ExecutionAnnouncementComScreen extends React.Component{
     static navigationOptions = {
@@ -49,8 +43,9 @@ class ExecutionAnnouncementComScreen extends React.Component{
             allScreenConditions: '', // 所有筛选条件
             pagination: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 5,
             },
+            totalPage: 1,
             ListData: '', // 列表数据
             BaseinfoData: '', // 基础信息
         }
@@ -79,14 +74,14 @@ class ExecutionAnnouncementComScreen extends React.Component{
     }
 
     componentDidMount() {
-        // const { params } = this.props.navigation.state;
         AsyncStorage.multiGet(['staffNumber', 'secretKey', 'projectNo', 'queryName', 'queryNumber', 'queryType']).then(res => {
             const obj = DealStorageData(res);
-            Services.getimensionality({...obj, ...{dataDimension: "executive"}}).then(res => {
+            Services.getimensionality({...obj, ...{dataDimension: "executive", pageSize: 5}}).then(res => {
                 if(res.isSuccess) {
-                    console.log(res.datas.page.dataList);
+                    console.log(res.datas);
                     this.setState({
                         ListData: res.datas.page.dataList,
+                        totalPage: res.datas.page.totalPages,
                     })
                 }
             })
@@ -101,19 +96,48 @@ class ExecutionAnnouncementComScreen extends React.Component{
         });
     }
 
+    fetchList(currentPage, params){
+        AsyncStorage.multiGet(['staffNumber', 'secretKey', 'projectNo', 'queryName', 'queryNumber', 'queryType']).then(res => {
+            const obj = DealStorageData(res);
+            const obj1 = {dataDimension: 'executive', pageSize: 5, currentPage: currentPage || 1};
+            Services.getimensionality(Object.assign(obj, obj1, params || {})).then(res => {
+                if(res.isSuccess) {
+                    this.setState({
+                        ListData: res.datas.page.dataList,
+                        totalPage: res.datas.page.totalPages,
+                        pagination: {
+                            currentPage: currentPage,
+                        }
+                    })
+                }
+            })
+        });
+    }
+    // 翻页
+    Navigation(n) {
+        const { allScreenConditions } = this.state;
+        this.fetchList(n, allScreenConditions);
+    }
+
     // 案号搜索
     CaseNumSearch(obj) {
-        console.log(obj);
+        this.setState({
+            allScreenConditions: obj,
+        })
+        this.fetchList(1, obj);
     }
 
     // 详细筛选搜索
     DetailScreen(obj) {
-        console.log(obj);
+        this.fetchList(1, obj);
+        this.setState({
+            allScreenConditions: obj,
+        })
     }
 
     render(){
         const { navigate } = this.props.navigation;
-        const { BaseinfoData, ListData } = this.state;
+        const { BaseinfoData, ListData, pagination, totalPage } = this.state;
         const title = [
             {
                 key: 'id',
@@ -140,10 +164,6 @@ class ExecutionAnnouncementComScreen extends React.Component{
                 value: '执行标的'
             },
             {
-                key: 'region',
-                value: '省份'
-            },
-            {
                 key: 'apiDataSource',
                 value: '详情'
             },
@@ -154,6 +174,15 @@ class ExecutionAnnouncementComScreen extends React.Component{
                 <DetailScreen layoutData={layoutData} CaseNumSearch={this.CaseNumSearch.bind(this)} DetailScreen={this.DetailScreen.bind(this)}
                 />
                 <Table title={title} ListData={ListData} />
+                <Pagination total={totalPage}
+                    className="custom-pagination-with-icon"
+                    current={pagination.currentPage}
+                    locale={{
+                        prevText: (<Text>上一页</Text>),
+                        nextText: (<Text>下一页</Text>),
+                    }}
+                    onChange={this.Navigation.bind(this)}
+                />
                 <Button onPress={() => navigate('DrawerOpen')} title='打开侧滑菜单' />
             </ScrollView>
         );

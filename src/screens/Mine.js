@@ -14,11 +14,10 @@ class MineScreen extends Component{
     render(){
         const { navigate } = this.props.navigation;
         return(
-            <View style={{backgroundColor:'#fff',flex:1}}>
-                <Text style={{padding:20}}>this is Mine page</Text>
-                {/*<Button*/}
-                    {/*onPress={() => navigate('AllUser')}*/}
-                    {/*title="直接登录" />*/}
+            <View style={{backgroundColor:'#fff',flex:1, padding:10}}>
+                <Button
+                    onPress={() => navigate('ChangePass')}
+                    title="修改密码" />
             </View>
         );
     }

@@ -30,7 +30,7 @@ class PasswordLogin extends Component{
                 message: '密码正确.'
             });
             // your codes to close this view
-            this.props.navigation.navigate('Main')
+            this.props.navigation.navigate('Home')
         } else {
             this.setState({
                 status: 'wrong',

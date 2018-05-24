@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import { Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Services from '../services/dimensionality';
@@ -7,97 +8,99 @@ import {
     View,
     StyleSheet,
     ImageBackground,
-    Alert,
 } from 'react-native';
 
-class LoginScreen extends Component{
+class RegisterScreen extends Component{
     static navigationOptions = {
-        title: '登录',
+        title: '注册',
     }
     constructor(props) {
         super(props);
         this.state = {
             UserName: '',
             Password: '',
+            PasswordAgin: '',
         }
-    }
-
-    Login() {
-        const { UserName, Password } = this.state;
-        const { navigate } = this.props.navigation;
-        const obj = {
-            name: UserName,
-            password: Password,
-        }
-        Services.login(obj).then(res => {
-            console.log(res);
-            if(res.isSuccess) {
-                navigate('Home');
-            } else {
-                Alert.alert(res.message);
-            }
-        })
     }
 
     InputUserName(text) {
+        console.log(text);
         this.setState({
             UserName: text,
         })
     }
 
     InputPassword(text) {
+        console.log(text);
         this.setState({
             Password: text,
         })
     }
 
-    render(){
+    InputPasswordAgin(text) {
+        this.setState({
+            PasswordAgin: text,
+        })
+    }
+
+    Register = () => {
         const { navigate } = this.props.navigation;
+        const { UserName, Password, PasswordAgin } = this.state;
+        if(PasswordAgin !== Password) {
+            Alert.alert('两次密码输入不一致，请重新输入');
+            this.setState({
+                PasswordAgin: '',
+            })
+        } else if(PasswordAgin === Password) {
+            const obj = {
+                name: UserName,
+                password: Password,
+                status: 'register',
+            }
+            Services.register(obj).then(res => {
+                console.log(res);
+                if(res.isSuccess) {
+                    navigate('SetPassword');
+                } else {
+                    Alert.alert(res.message);
+                }
+            })
+        }
+    }
+
+    render(){
         return(
             <ImageBackground source={require('./../image/bg.jpg')} style={styles.bg}>
-                <View>
-                    <Button
-                        style={{marginBottom:10}}
-                        onPress={() => navigate('Home')}
-                        title="直接登录" />
-                    <Button
-                        style={{marginBottom:10}}
-                        onPress={() => navigate('PasswordLogin')}
-                        title="手势密码登录" />
-                    <Button
-                        style={{marginBottom:10}}
-                        onPress={() => navigate('SetPassword')}
-                        title="设置手势密码" />
-                </View>
                 <View style={styles.login}>
                     <Input
                         inputContainerStyle={styles.inputContainerStyle}
                         containerStyle={{width: 250, marginBottom: 15}}
-                        placeholder='Username'
+                        placeholder='请输入用户名'
                         leftIcon={<Icon name='user' size={18} />}
                         onChangeText={this.InputUserName.bind(this)}
                     />
                     <Input
                         inputContainerStyle={styles.inputContainerStyle}
-                        containerStyle={{width: 250}}
-                        placeholder='Password'
+                        containerStyle={{width: 250, marginBottom: 15}}
+                        placeholder='请输入密码'
                         leftIcon={<Icon name='lock' size={18} />}
                         onChangeText={this.InputPassword.bind(this)}
                     />
+                    <Input
+                        inputContainerStyle={styles.inputContainerStyle}
+                        containerStyle={{width: 250}}
+                        placeholder='请再次输入密码'
+                        value={this.state.PasswordAgin}
+                        leftIcon={<Icon name='lock' size={18} />}
+                        onChangeText={this.InputPasswordAgin.bind(this)}
+                    />
                     <View style={styles.bottom}>
-                        <Button
-                            title='登录'
-                            titleStyle={{ fontWeight: "700" }}
-                            buttonStyle={styles.buttonStyle}
-                            containerStyle={{ marginTop: 20 }}
-                            onPress={this.Login.bind(this)}
-                        />
                         <Button
                             titleStyle={{ fontWeight: "700" }}
                             buttonStyle={styles.buttonStyle}
                             containerStyle={{ marginTop: 20 }}
                             title='注册'
-                            onPress={() => navigate('Register')}
+                            onPress={this.Register}
                         />
                     </View>
                 </View>
@@ -119,9 +122,6 @@ const styles = StyleSheet.create({
         //祛除内部元素的白色背景
         backgroundColor:'rgba(0,0,0,0)',
     },
-    login: {
-
-    },
     inputContainerStyle: {
         height: 40,
         borderColor: 'gray',
@@ -140,9 +140,9 @@ const styles = StyleSheet.create({
     },
     bottom: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'center'
     }
 })
 
 
-export default LoginScreen;
+export default RegisterScreen;

@@ -2,17 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'antd-mobile';
 
-class CompanyBaseInfo extends React.Component{
+class CompanyBaseInfo extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    render(){
+    render() {
         const { BaseinfoData } = this.props;
-        return(
+        return (
             <View style={styles.container}>
                 <View style={styles.name}>
-                    <Text style={{fontSize: 16, fontWeight: '700',}}>
+                    <Text style={{ fontSize: 16, fontWeight: '700', }}>
                         {BaseinfoData.corpName || '-'}
                     </Text>
                     {

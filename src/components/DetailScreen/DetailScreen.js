@@ -7,7 +7,7 @@ import * as Services from '../../services/queryRegion';
 import ScreenItem from './ScreenItem';
 import SelectDate from './SelectDate';
 
-class DetailScreen extends React.Component{
+class DetailScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,9 +35,7 @@ class DetailScreen extends React.Component{
             const params = region.params;
             AsyncStorage.getItem('idNo').then(res => {
                 params.queryNumber = res;
-                console.log(params);
                 Services.queryRegion(params).then((res) => {
-                    console.log(res);
                     if (res && res.isSuccess && res.datas.regions.length > 0) {
                         this.setState({
                             regionArr: res.datas.regions,
@@ -73,6 +71,15 @@ class DetailScreen extends React.Component{
     // 输入案号
     InputCaseNum(text) {
         console.log(text);
+        this.setState({
+            caseNum: text,
+        });
+    }
+
+    // 根据案号进行筛选
+    SearchTypeCase() {
+        const { caseNum } = this.state;
+        this.props.CaseNumSearch({ caseNo: caseNum });
     }
 
     // 重置-清除所选数据
@@ -188,21 +195,28 @@ class DetailScreen extends React.Component{
         }
     }
 
-    render(){
+    render() {
         const { isOpenDetailScreen, layoutData, detailScreen, startTime, endTime, regionArr } = this.state;
-        return(
+        return (
             <View style={styles.container}>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-                    <Input
-                        inputContainerStyle={styles.inputContainerStyle}
-                        inputStyle={{fontSize: 14}}
-                        placeholder='输入案号进行搜索'
-                        onChangeText={this.InputCaseNum.bind(this)}
-                        rightIcon={{ name: 'search', color: '#666' }}
-                    />
-                    <Text style={styles.text} onPress={() => {this.setState({isOpenDetailScreen: !isOpenDetailScreen })}}>
-                        详细筛选 <Icon name={isOpenDetailScreen ? 'chevron-up' : 'chevron-down'} />
-                    </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                    {
+                        layoutData && layoutData.isHaveSearch ? <Input
+                            inputContainerStyle={styles.inputContainerStyle}
+                            containerStyle={{width: 250, marginLeft: 15,}}
+                            inputStyle={{ fontSize: 14 }}
+                            placeholder='输入案号进行搜索'
+                            onChangeText={this.InputCaseNum.bind(this)}
+                            rightIcon={<Icon name='search' size={18} style={{ marginRight: 5 }} onPress={this.SearchTypeCase.bind(this)} />}
+                        /> : ''
+                    }
+                    {
+                        layoutData && layoutData.isHaveDetailScreen ? <Text style={styles.text} onPress={() => {
+                            this.setState({ isOpenDetailScreen: !isOpenDetailScreen })
+                        }}>
+                            详细筛选 <Icon name={isOpenDetailScreen ? 'chevron-up' : 'chevron-down'} />
+                        </Text> : ''
+                    }
                 </View>
                 {
                     isOpenDetailScreen ?
@@ -233,9 +247,10 @@ class DetailScreen extends React.Component{
                                 getStartTime={this.getStartTime.bind(this)}
                                 getEndTime={this.getEndTime.bind(this)}
                             />
-                            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                                <Button containerStyle={{margin: 5}} titleStyle={{fontSize: 12, color: '#000'}} buttonStyle={{backgroundColor: '#d9d9d9'}} onPress={this.Reset.bind(this)} title='重置' />
-                                <Button containerStyle={{margin: 5}} titleStyle={{fontSize: 12}} onPress={this.ConfirmScreen.bind(this)} title='确定筛选' />
+                            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                                <Button containerStyle={{ margin: 5 }} titleStyle={{ fontSize: 12, color: '#000' }} buttonStyle={{ backgroundColor: '#d9d9d9' }} onPress={this.Reset.bind(this)}
+                                        title='重置' />
+                                <Button containerStyle={{ margin: 5 }} titleStyle={{ fontSize: 12 }} onPress={this.ConfirmScreen.bind(this)} title='确定筛选' />
                             </View>
                         </View> : null
                 }
@@ -249,8 +264,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     text: {
-        marginRight: 30,
         color: '#1890ff',
+        marginLeft: 15,
     },
     inputContainerStyle: {
         height: 30,
@@ -258,7 +273,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         width: 250,
-        marginLeft: 30,
     },
     detailScreen: {
         borderColor: 'gray',

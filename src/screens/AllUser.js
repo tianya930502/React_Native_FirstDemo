@@ -24,7 +24,6 @@ class AllUserScreen extends Component{
     }
     componentDidMount() {
         Services.getAllUsers().then(res => {
-            console.log(res);
             if (res.isSuccess) {
                 const list = res.datas.list;
                 const CompanyList = [];
@@ -40,14 +39,11 @@ class AllUserScreen extends Component{
                     PeopleList,
                     CompanyList,
                 })
-                console.log(CompanyList);
-                console.log(PeopleList);
             }
         })
     }
 
     SkipPeople(item) {
-        console.log(item);
         const { navigate } = this.props.navigation;
         navigate('ExecutionAnnouncement');
         AsyncStorage.setItem('queryNumber', `${item.idNo === undefined ? '' : item.idNo}`);
@@ -56,7 +52,6 @@ class AllUserScreen extends Component{
         AsyncStorage.setItem('readStatus', `${item.readStatus === undefined ? '' : item.readStatus}`);
     }
     SkipCompany(item) {
-        console.log(item);
         const { navigate } = this.props.navigation;
         navigate('ExecutionAnnouncementCom');
         AsyncStorage.setItem('queryName', `${item.queryName === undefined ? '' : item.queryName}`);

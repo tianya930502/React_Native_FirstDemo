@@ -41,7 +41,6 @@ class SelectDate extends React.Component{
 
     // 选择开始时间
     selectStartTime(day) {
-        console.log(day);
         this.setState({
             startTime: day.dateString,
             isOpenStart: false,

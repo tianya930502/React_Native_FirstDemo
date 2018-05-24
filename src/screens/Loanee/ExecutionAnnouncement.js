@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, ScrollView, View, Text, AsyncStorage, StyleSheet, PanResponder } from 'react-native';
+import { Button, ScrollView, Text, AsyncStorage, StyleSheet, PanResponder } from 'react-native';
+import { Pagination } from 'antd-mobile';
 import { DrawerNavigator } from 'react-navigation';
-import * as Services from '../../services/dimensionality';
 
+import * as Services from '../../services/dimensionality';
 import LostNoticeScreen from './LostNotice';
 import ProceedingsAnnouncementScreen from './ProceedingsAnnouncement';
 import RefereeDocumentsScreen from './RefereeDocuments';
@@ -14,6 +15,7 @@ import LawyerLetterScreen from './LawyerLetter';
 
 import DetailScreen from '../../components/DetailScreen/DetailScreen';
 import LoaneeBaseInfo from '../../components/LoaneeBaseInfo';
+import Table from '../../components/Table';
 import { DealStorageData } from "../../utils/storage";
 
 const layoutData = {
@@ -47,50 +49,51 @@ class ExecutionAnnouncementScreen extends React.Component{
             allScreenConditions: '', // 所有筛选条件
             pagination: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 5,
             },
+            totalPage: 1,
             ListData: '', // 列表数据
             BaseinfoData: '', // 基础信息
         }
     }
-    // componentWillMount() {
-    //     let isTrue = true;
-    //     this._gestureHandlers = PanResponder.create({
-    //         // 要求成为响应者：
-    //         onStartShouldSetPanResponder: (evt, gestureState) => true, // 在用户刚开始触摸时成为响应者
-    //         onMoveShouldSetPanResponder: (evt, gestureState) => true, // 在用触摸点开始移动时成为响应者
-    //         // 用户移动时执行的事件
-    //         onPanResponderMove: (evt, gestureState) => {
-    //             // console.log(gestureState.dx); // 用户移动的距离，向右为正，向左为负
-    //             if(!gestureState.dy && isTrue) {
-    //                 isTrue = false;
-    //                 this.props.navigation.navigate('DrawerOpen');
-    //             }
-    //             // 从成为响应者开始时的累计手势移动距离为gestureState.d{x,y}
-    //         },
-    //         onPanResponderRelease: (evt, gestureState) => {
-    //             // 用户放开了所有的触摸点，且此时视图已经成为了响应者。
-    //             // 一般来说这意味着一个手势操作已经成功完成。
-    //             isTrue = true;
-    //         },
-    //     })
-    // }
+    componentWillMount() {
+        let isTrue = true;
+        this._gestureHandlers = PanResponder.create({
+            // 要求成为响应者：
+            onStartShouldSetPanResponder: (evt, gestureState) => true, // 在用户刚开始触摸时成为响应者
+            onMoveShouldSetPanResponder: (evt, gestureState) => true, // 在用触摸点开始移动时成为响应者
+            // 用户移动时执行的事件
+            onPanResponderMove: (evt, gestureState) => {
+                // console.log(gestureState.dx); // 用户移动的距离，向右为正，向左为负
+                if(!gestureState.dy && isTrue) {
+                    isTrue = false;
+                    this.props.navigation.navigate('DrawerOpen');
+                }
+                // 从成为响应者开始时的累计手势移动距离为gestureState.d{x,y}
+            },
+            onPanResponderRelease: (evt, gestureState) => {
+                // 用户放开了所有的触摸点，且此时视图已经成为了响应者。
+                // 一般来说这意味着一个手势操作已经成功完成。
+                isTrue = true;
+            },
+        })
+    }
 
     componentDidMount() {
-        // const { params } = this.props.navigation.state;
         AsyncStorage.multiGet(['staffNumber', 'secretKey', 'projectNo', 'queryName', 'queryNumber', 'queryType']).then(res => {
             const obj = DealStorageData(res);
-            Services.getimensionality({...obj, ...{dataDimension: "executive"}}).then(res => {
+            Services.getimensionality({...obj, ...{dataDimension: "executive", pageSize: 5}}).then(res => {
                 if(res.isSuccess) {
-                    console.log(res.datas.page);
+                    console.log(res.datas);
                     this.setState({
-                        ListData: res.datas.page,
+                        ListData: res.datas.page.dataList,
+                        totalPage: res.datas.page.totalPages,
                     })
                 }
             })
             Services.getBaseInfoData({...obj, ...{dataDimension: "executive"}}).then(res => {
                 if(res.isSuccess) {
-                    console.log(res.datas.List);
+                    console.log(res.datas.list);
                     this.setState({
                         BaseinfoData: res.datas.list,
                     })
@@ -99,23 +102,96 @@ class ExecutionAnnouncementScreen extends React.Component{
         });
     }
 
+    fetchList(currentPage, params){
+        AsyncStorage.multiGet(['staffNumber', 'secretKey', 'projectNo', 'queryName', 'queryNumber', 'queryType']).then(res => {
+            const obj = DealStorageData(res);
+            const obj1 = {dataDimension: 'executive', pageSize: 5, currentPage: currentPage || 1};
+            Services.getimensionality(Object.assign(obj, obj1, params || {})).then(res => {
+                if(res.isSuccess) {
+                    this.setState({
+                        ListData: res.datas.page.dataList,
+                        totalPage: res.datas.page.totalPages,
+                        pagination: {
+                            currentPage: currentPage,
+                        }
+                    })
+                }
+            })
+        });
+    }
+    // 翻页
+    Navigation(n) {
+        const { allScreenConditions } = this.state;
+        this.fetchList(n, allScreenConditions);
+    }
+
     // 案号搜索
     CaseNumSearch(obj) {
-        console.log(obj);
+        this.setState({
+            allScreenConditions: obj,
+        })
+        this.fetchList(1, obj);
     }
 
     // 详细筛选搜索
     DetailScreen(obj) {
-        console.log(obj);
+        this.fetchList(1, obj);
+        this.setState({
+            allScreenConditions: obj,
+        })
     }
 
     render(){
         const { navigate } = this.props.navigation;
-        const { BaseinfoData, ListData } = this.state;
+        const { BaseinfoData,  ListData, pagination, totalPage } = this.state;
+        const title = [
+            {
+                key: 'id',
+                value: '#'
+            },
+            {
+                key: 'caseNo',
+                value: '案号'
+            },
+            {
+                key: 'filingTime',
+                value: '立案日期'
+            },
+            {
+                key: 'courtName',
+                value: '法院'
+            },
+            {
+                key: 'caseStatusDes',
+                value: '案件状态'
+            },
+            {
+                key: 'executes',
+                value: '执行标的'
+            },
+            {
+                key: 'region',
+                value: '省份'
+            },
+            {
+                key: 'apiDataSource',
+                value: '详情'
+            },
+        ];
         return(
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container}  {...this._gestureHandlers.panHandlers}>
                 <LoaneeBaseInfo BaseinfoData={BaseinfoData} />
                 <DetailScreen layoutData={layoutData} CaseNumSearch={this.CaseNumSearch.bind(this)} DetailScreen={this.DetailScreen.bind(this)}
+                />
+                <Table title={title} ListData={ListData} />
+                <Pagination total={totalPage}
+                            className="custom-pagination-with-icon"
+                            current={pagination.currentPage}
+                            locale={{
+                                prevText: (<Text>上一页</Text>),
+                                nextText: (<Text>下一页</Text>),
+                            }}
+                            onChange={this.Navigation.bind(this)}
                 />
                 <Button onPress={() => navigate('DrawerOpen')} title='打开侧滑菜单' />
             </ScrollView>
